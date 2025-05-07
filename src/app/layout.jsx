@@ -24,10 +24,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="sv" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-300 dark:bg-slate-900`}
       >
         <Providers>
-          {children}
+          <div className="wrapper">
+            <div className="bg-background my-4 rounded-2xl p-4 sm:p-8 min-h-[calc(100svh-2rem)]">
+              {children}
+            </div>
+          </div>
         </Providers>
       </body>
     </html>
