@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       >
         <Providers>
           <div className="wrapper">
-            <div className="bg-background my-4 rounded-2xl p-4 sm:p-8 min-h-[calc(100svh-2rem)]">
+            <div className="bg-background my-4 rounded-2xl p-4 sm:p-8 min-h-[calc(100svh-2rem)] grid grid-rows-[1fr]">
               {children}
             </div>
           </div>

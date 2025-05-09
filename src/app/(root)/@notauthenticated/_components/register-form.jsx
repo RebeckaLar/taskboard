@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useAuth } from "@/context/authContext"
+import { getErrorMessage } from "@/lib/getFirebaseError.js"
 
 export const registerFormSchema = z.object({
   displayName: z.string()
@@ -35,11 +37,20 @@ export const registerFormSchema = z.object({
 export const RegisterForm = ({ changeForm, form}) => {
 
   const [errorMessage, setErrorMessage] = useState(null)
+  const { register, loading } = useAuth()
 
 
-  function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values) {
+
+    try {
+      const { email, password, displayName } = values
+      await register(email, password, displayName)
+
+    } catch (err) {
+      const errorMessage = getErrorMessage(err.code)
+      setErrorMessage(errorMessage)
+    }
+
     console.log(values)
   }
 
@@ -105,7 +116,7 @@ export const RegisterForm = ({ changeForm, form}) => {
           )}
         />
         <p>Har du redan ett konto? <span onClick={() => changeForm("login")} className="underline cursor-pointer">Logga in här</span></p>
-        <Button type="submit">Registrera</Button>
+        <Button disabled={loading} className="w-full sm:w-auto" type="submit">Registrera</Button>
       </form>
     </Form>
     </>
