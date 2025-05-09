@@ -49,7 +49,7 @@ export const AvatarDropdown = () => {
                         </Link>
                     </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator className="md:hidden"/>
                    </> 
                 )
             }
