@@ -1,8 +1,8 @@
-import { Logout } from "./log-out"
+// import { Logout } from "./log-out"
 
 function HomePage() {
   return (
-    <div>HomePage Logged in <Logout /></div>
+    <div>HomePage Logged in</div>
   )
 }
 
