@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const [authLoaded, setAuthLoaded] = useState(false)
 
     const router = useRouter()
-    console.log(user)
+    // console.log(user)
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -108,13 +108,19 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const isAdmin = () => {
+        if(!user) return false
+        return user.role === "admin"
+    }
+
     const value = {
         user,
         loading,
         authLoaded,
         register,
         logout,
-        login
+        login,
+        isAdmin
     }
 
     return (

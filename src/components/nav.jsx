@@ -5,6 +5,7 @@ import { Poppins } from "next/font/google"
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { AvatarDropdown } from "./avatar-dropdown"
+import { useAuth } from "@/context/authContext"
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -13,7 +14,8 @@ const poppins = Poppins({
 
 export const Nav = () => {
 
-    const isAdmin = true
+    // const isAdmin = true
+    const { isAdmin } = useAuth()
 
     
   return (
@@ -29,7 +31,7 @@ export const Nav = () => {
         </Button>
 
         {
-            isAdmin && (
+            isAdmin() && (
                 <>
                     <Button asChild variant="outline" size="lg" className="hidden md:flex">
                         <Link href="/all">Alla</Link> 

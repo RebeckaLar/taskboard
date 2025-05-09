@@ -10,33 +10,65 @@ import {
   } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useAuth } from "@/context/authContext"
+import { LogOutIcon, SettingsIcon } from "lucide-react"
+import Link from "next/link"
 
   
 
 export const AvatarDropdown = () => {
 
 
-    const { user } = useAuth()
+    const { user, logout, isAdmin } = useAuth()
 
   return (
     <DropdownMenu>
 
+        {/* AVATAR ICON */}
         <DropdownMenuTrigger>
             <Avatar className="size-9 cursor-pointer">
                 {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
                 <AvatarImage src={user?.photoURL || ""} />
-                {/* <AvatarFallback>CN</AvatarFallback> */}
-                <AvatarFallback>{user?.displayName?.slice(0,2).toUpperCase() || "JD"}</AvatarFallback>
+                <AvatarFallback className="bg-gray-700/30">{user?.displayName?.slice(0,2).toUpperCase() || "JD"}</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+        {/* DROPDOWN MENU */}
+        <DropdownMenuContent align="end" className="w-44">
+            {
+                isAdmin() && (
+                   <>  
+                    <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer md:hidden">
+                        <Link href="/all" className="flex items-center gap-2 text-xl md:text-base">
+                            Alla
+                        </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer md:hidden">
+                        <Link href="/add" className="flex items-center gap-2 text-xl md:text-base">
+                            Lägg till uppgift
+                        </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+                   </> 
+                )
+            }
+
+            <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer">
+                <Link href="/settings" className="flex items-center gap-2 text-xl md:text-base">
+                    <SettingsIcon className="size-5 md:size-4"/>
+                    Inställningar
+                </Link>
+            </DropdownMenuItem>
+
+        {/* LOG OUT BUTTON */}
+            <DropdownMenuItem onClick={logout} className="not-dark:hover:bg-gray-200 cursor-pointer">
+                <Link href="/settings" className="flex items-center gap-2 text-xl md:text-base">
+                    <LogOutIcon className="size-5 md:size-4"/>
+                    Logga ut
+                </Link>
+            </DropdownMenuItem>
+
         </DropdownMenuContent>
 
     </DropdownMenu>

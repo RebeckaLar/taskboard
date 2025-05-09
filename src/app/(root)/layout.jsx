@@ -7,7 +7,7 @@ function ApplicationLayout({ authenticated, notauthenticated }) {
     // const user = null 
     const { user, authLoaded } = useAuth()
 
-    console.log(authLoaded)
+    // console.log(authLoaded)
 
     if(!authLoaded) {
       return (
