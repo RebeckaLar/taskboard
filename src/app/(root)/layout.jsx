@@ -1,10 +1,10 @@
 "use client"
 import { useAuth } from "@/context/authContext"
 import { Loader2Icon } from "lucide-react"
+import { Toaster } from "react-hot-toast"
 
 function ApplicationLayout({ authenticated, notauthenticated }) {
 
-    // const user = null 
     const { user, authLoaded } = useAuth()
 
     // console.log(authLoaded)
@@ -23,19 +23,11 @@ function ApplicationLayout({ authenticated, notauthenticated }) {
             ? notauthenticated
             : authenticated
         }
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+        />
     </>
-        //Använder inte parallella routes på detta sätt
-    // <>
-    // <div className="border w-full h-64">
-    //     { children }
-    // </div>
-    // <div className="border w-full h-64">
-    //     { authenticated }     
-    // </div>
-    // <div className="border w-full h-64">
-    //     { notauthenticated }
-    // </div>
-    // </>
   )
 }
 

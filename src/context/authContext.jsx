@@ -1,10 +1,11 @@
 "use client"
 
 import { auth, db } from "@/lib/firebase"
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
-import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore"
+import { createUserWithEmailAndPassword, EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
+import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 const AuthContext = createContext()
 
@@ -24,11 +25,6 @@ export const AuthProvider = ({ children }) => {
                 return
             }
             const docRef = doc(db, "users", firebaseUser.uid)
-
-            // const docSnap = await getDoc(docRef)
-            // if(docSnap.exists()) {
-            //     setUser(docSnap.data())
-            // }
 
             const getUserDocWithRetry = async (retries = 5, delay = 300) => {
                 let docSnap = null
@@ -113,14 +109,65 @@ export const AuthProvider = ({ children }) => {
         return user.role === "admin"
     }
 
+    const updateUser = async (user, newUserData) => {
+        setLoading(true)
+        const toastId = toast.loading('Laddar...')
+        try {
+            const userRef = doc(db, "users", user.uid)
+            await updateDoc(userRef, newUserData)
+            setUser((prevUser) => ({ ...prevUser, ...newUserData }))
+            toast.success("Profilen uppdaterad", { id: toastId })
+        } catch (error) {
+            toast.error("Någontin gick fel, försök igen", { id: toastId })
+            console.log("Error updating the user: ", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const changePassword = async (currentPassword, newPassword) => {
+        setLoading(true)
+        const toastId = toast.loading('Laddar...')
+        const user = auth.currentUser
+
+        if(!user) {
+            console.error("Ingen användare är inloggad")
+            toast.error("Ingen användare är inloggad", { id: toastId })
+            return
+        }
+
+        try {
+            const userCredential = await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, currentPassword))
+            await updatePassword(userCredential.user, newPassword)
+            toast.success("Lösenordet har uppdaterats", { id: toastId })
+        } catch (error) {
+            console.error("Error reauthenticating user: ", error)
+            if(error.code === "auth/invalid-credential") {
+                toast.error("Felaktigt lösenord", { id: toastId })
+              } else if(error.code === "auth/weak-password") {
+                toast.error("Lösenordet är för svagt", { id: toastId })
+              } else {
+                toast.error("Mågonting gick fel, försök igen", { id: toastId })
+              }
+
+              
+            throw error 
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const value = {
         user,
+        setUser,
         loading,
         authLoaded,
         register,
         logout,
         login,
-        isAdmin
+        isAdmin,
+        updateUser,
+        changePassword
     }
 
     return (

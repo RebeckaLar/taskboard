@@ -27,7 +27,7 @@ export const AvatarDropdown = () => {
         <DropdownMenuTrigger>
             <Avatar className="size-9 cursor-pointer">
                 {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-                <AvatarImage src={user?.photoURL || ""} />
+                <AvatarImage src={user?.photoURL || ""} className="h-full w-full object-cover"/>
                 <AvatarFallback className="bg-gray-700/30">{user?.displayName?.slice(0,2).toUpperCase() || "JD"}</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
