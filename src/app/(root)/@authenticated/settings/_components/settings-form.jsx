@@ -25,7 +25,7 @@ export const SettingsForm = ({ user, isOwn }) => {
 
                 <div className="flex items-center justify-between lg:justify-stretch gap-10">
                     <p className="font-semibold text-lg">Profilbild:</p>
-                    <ProfileImageUploader />
+                    <ProfileImageUploader user={user} isOwn={isOwn}/> 
                 </div>
             </div>
                 {
