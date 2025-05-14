@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }) => {
 
             setAuthLoaded(true)
         })
+
         return () => unsub()
     }, [])
 
