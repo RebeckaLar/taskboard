@@ -1,8 +1,12 @@
 // import { Logout } from "./log-out"
 
+import { Header } from "@/components/header"
+
 function HomePage() {
   return (
-    <div>HomePage Logged in</div>
+    <>
+      <Header />
+    </>
   )
 }
 
