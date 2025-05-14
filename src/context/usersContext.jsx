@@ -24,7 +24,7 @@ export const UsersProvider = ({ children }) => {
         //Map through all users in the snapshot and push them manually into the array
 
         querySnapshot.forEach(doc => {
-            usersData.push({ ...doc.data, id: doc.id }) //doc.data to get the information. 
+            usersData.push({ ...doc.data(), id: doc.id }) //doc.data to get the information. 
         })
         setUsers(usersData)
         // Everytime theres a change to the users-collection, we look at snapshot and update our state
