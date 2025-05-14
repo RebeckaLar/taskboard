@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Button } from "./ui/button"
 import { AvatarDropdown } from "./avatar-dropdown"
 import { useAuth } from "@/context/authContext"
+import { useSearchParams } from "next/navigation"
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -17,6 +18,9 @@ export const Nav = () => {
     // const isAdmin = true
     const { isAdmin } = useAuth()
 
+    const searchParams = useSearchParams()
+    const date = searchParams.get("date")
+
     
   return (
     <nav className="flex items-center justify-between pb-10">
@@ -27,14 +31,21 @@ export const Nav = () => {
         </div>
         <div className="flex items-center gap-2">
         <Button asChild variant="outline" size="lg">
-           <Link href="/">Min dag</Link> 
+           <Link href={`${date 
+            ? `/?date=${date}`
+            : "/"
+        }`}>Min dag</Link> 
         </Button>
 
         {
             isAdmin() && (
                 <>
                     <Button asChild variant="outline" size="lg" className="hidden md:flex">
-                        <Link href="/all">Alla</Link> 
+                        <Link href={`${
+                            date 
+                            ? `/all?date=${date}` 
+                            : "/all"
+                        }`}>Alla</Link> 
                     </Button>
                     <Button asChild variant="outline" size="lg" className="hidden md:flex">
                         <Link href="/add">Lägg till uppgift</Link> 

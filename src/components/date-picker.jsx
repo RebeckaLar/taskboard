@@ -12,7 +12,7 @@ export const DatePicker = ({ date, onDateChange }) => {
   return (
     <Popover>
         <PopoverTrigger asChild>
-            <Button variant="outline">
+            <Button>  
                 {
                     isToday(date)
                     ? "Idag"
@@ -22,7 +22,7 @@ export const DatePicker = ({ date, onDateChange }) => {
                             ? "Igår"
                             : format(date, "PPP", { locale: sv })
                 }
-            </Button>
+            </Button >
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
         <Calendar

@@ -1,6 +1,6 @@
 "use client"
 
-import { isValid, parse } from "date-fns"
+import { addDays, format, isValid, parse } from "date-fns"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Button } from "./ui/button"
 import { ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react"
@@ -18,18 +18,23 @@ export const Header = () => {
   : new Date()
 
   // Test this by going to http://localhost:3000/?date=2025-05-25 
-  console.log({parsed})
+  // console.log({parsed})
 
   //If valid date, send parsed, otherwise a new date
   const selectedDate = isValid(parsed) ? parsed : new Date
 
   const navigateToDate = (newDate) => {
-
+    const formatted = format(newDate, "yyyy-MM-dd")
+    const params = new URLSearchParams(searchParams.toString())
+    console.log(formatted)
+    params.set("date", formatted)
+    router.push(`${pathName}?${params.toString()}`)
   }
 
   return (
     <div className="flex items-center justify-center gap-4">
-      <Button variant="outline">
+      {/* When clicking left button, select the current date but go back one day: */}
+      <Button variant="outline" onClick={() => navigateToDate(addDays(selectedDate, -1))}>
         <ChevronsLeftIcon />
       </Button>
 
@@ -37,7 +42,8 @@ export const Header = () => {
       date={selectedDate} 
       onDateChange={navigateToDate}
       />
-      <Button variant="outline">
+      {/* When clicking left button, select the current date but add one day: */}
+      <Button variant="outline" onClick={() => navigateToDate(addDays(selectedDate, 1))}>
         <ChevronsRightIcon />
       </Button>
     </div>
