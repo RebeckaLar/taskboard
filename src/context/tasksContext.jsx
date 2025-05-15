@@ -1,7 +1,7 @@
 "use client"
 
 import { addDoc, collection, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp, where } from "firebase/firestore"
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAuth } from "./authContext"
 import { format } from "date-fns"
 import { db } from "@/lib/firebase"
@@ -15,7 +15,7 @@ export const TasksProvider = ({ children }) => {
     const { isAdmin, authLoaded, user } = useAuth()
 
     useEffect(() => {
-        if(!authLoaded || user) return //If downloading db is not finished, or if there are no users, return. Otherwise:
+        if(!authLoaded || !user) return //If downloading db is not finished, or if there are no users, return. Otherwise:
         setLoading(true)
         let q
 
@@ -31,7 +31,7 @@ export const TasksProvider = ({ children }) => {
         }
 
         const unsub = onSnapshot(q, querySnap => {
-            const updatedTasks = querySnap.map(doc => ({
+            const updatedTasks = querySnap.docs.map(doc => ({
                 id: doc.id, 
                 ...doc.data()
             }))
@@ -40,7 +40,7 @@ export const TasksProvider = ({ children }) => {
         })
 
         return () => unsub()
-    }, [isAdmin])
+    }, [isAdmin, user])
 
     const getNextOrder = () => {
         return Math.max(...tasks.map(task => task.order ?? 0), 0) + 1000
@@ -69,11 +69,23 @@ export const TasksProvider = ({ children }) => {
             setLoading(false)
         }
     }
+    //Sending the uid object and date object
+    const getTasksByUserForDate = (uid, date) => {
+ 
+        const iso = useMemo(() => format(date, "yyyy-MM-dd"), [date]) //Variable used to avoid repeating code
+
+        return useMemo(() => {
+            return tasks
+                .filter(task => task.ownerId === uid && task.date === iso)
+                .sort((a, b) => a.order - b.order)
+        }, [tasks, uid, iso])
+    }
 
     const value = {
         addTask,
         loading,
-        tasks
+        tasks,
+        getTasksByUserForDate
     }
 
     return (
