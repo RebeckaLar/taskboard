@@ -1,6 +1,6 @@
 "use client"
 
-import { addDoc, collection, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp, where } from "firebase/firestore"
+import { addDoc, collection, doc, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp, updateDoc, where } from "firebase/firestore"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAuth } from "./authContext"
 import { format } from "date-fns"
@@ -69,6 +69,20 @@ export const TasksProvider = ({ children }) => {
             setLoading(false)
         }
     }
+
+    const completeTask = async (taskId) => {
+        setLoading(true)
+        try {
+            const taskRef = doc(db, "tasks", taskId)
+            await updateDoc(taskRef, {
+                completed: true
+            })
+        } catch (error) {
+            console.error("Fel vid uppdatering av uppgift: ", error)
+        } finally {
+            setLoading(false)
+        }
+    }
     //Sending the uid object and date object
     const getTasksByUserForDate = (uid, date) => {
  
@@ -85,7 +99,8 @@ export const TasksProvider = ({ children }) => {
         addTask,
         loading,
         tasks,
-        getTasksByUserForDate
+        getTasksByUserForDate,
+        completeTask
     }
 
     return (

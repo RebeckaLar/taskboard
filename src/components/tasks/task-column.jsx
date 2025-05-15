@@ -28,11 +28,18 @@ import { useTasks } from "@/context/tasksContext"
 
 export const TaskColumn = ({ user, date, className }) => {
 
-    const { getTasksByUserForDate } = useTasks()
+    const { getTasksByUserForDate, completeTask } = useTasks()
 
     const tasks = getTasksByUserForDate(user.uid, date)
-    // const [tasks, setTasks] = useState([])
 
+    //Return non-completed tasks
+    const notCompleted = tasks.filter(task => !task.completed)
+
+    const handleComplete = async (task) => {
+        completeTask(task.id)
+    }
+
+    // const [tasks, setTasks] = useState([])
     //ALTERNATIVE:
     // useEffect(() => {
     //     const getTasks = async () => {
@@ -49,16 +56,13 @@ export const TaskColumn = ({ user, date, className }) => {
     //     getTasks()
     // }, [])
 
-    const handleComplete = async () => {
-
-    }
 
   return (
     <div className={cn("bg-foreground/20 max-w-96 p-5 mx-auto rounded-xl flex flex-col", className)}>
         {/* TaskProgress */}
         {/* Admin switch */}
         <div className="flex-1">
-            <TaskList tasks={tasks} handleComplete={handleComplete} />
+            <TaskList tasks={notCompleted} handleComplete={handleComplete} />
         </div>
         {/* admin? Add btn */}
     </div>
