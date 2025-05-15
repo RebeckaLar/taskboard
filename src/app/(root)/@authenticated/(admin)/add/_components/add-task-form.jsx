@@ -110,7 +110,7 @@ async function onSubmit(values) {
         title: values.title,
         ownerId: values.ownerId
     }
-    console.log(values)
+
     try {
         setSubmitted(true) //To avoid spam
     
@@ -126,7 +126,7 @@ async function onSubmit(values) {
         if(values.reoccuring === "range") {
             const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to})
             await Promise.all(
-                days.dateMultiple.map(d => addTask({ ...base, date: d}))
+                days.map(d => addTask({ ...base, date: d}))
             )
         }
     

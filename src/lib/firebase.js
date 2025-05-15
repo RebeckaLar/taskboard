@@ -12,7 +12,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_APP_ID
 };
 
-//Avoiding initializing multiple apps when updating components
+//Avoiding initializing mult apps when updating components
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
 
 
