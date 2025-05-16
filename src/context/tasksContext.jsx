@@ -1,6 +1,6 @@
 "use client"
 
-import { addDoc, collection, doc, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp, updateDoc, where } from "firebase/firestore"
+import { addDoc, collection, doc, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp, updateDoc, where, writeBatch } from "firebase/firestore"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAuth } from "./authContext"
 import { format } from "date-fns"
@@ -83,6 +83,30 @@ export const TasksProvider = ({ children }) => {
             setLoading(false)
         }
     }
+
+    const saveReorder = async (orderedTasks, moved) => { //after tasks are moved, save the new order to db
+        setLoading(true)
+
+        const prevTasks = tasks
+
+        setTasks(orderedTasks)
+
+        const batch = writeBatch() 
+
+        moved.forEach(({ id, newOrder }) => {
+            batch.update(doc(db, "tasks", id), { order: newOrder })
+        })
+
+        try {
+            await batch.commit()
+        } catch (error) {
+            console.error("Batch error:", error)
+            setTasks(prevTasks)
+        } finally {
+            setLoading(false)
+        }
+    } 
+
     //Sending the uid object and date object
     const getTasksByUserForDate = (uid, date) => {
  
@@ -100,7 +124,8 @@ export const TasksProvider = ({ children }) => {
         loading,
         tasks,
         getTasksByUserForDate,
-        completeTask
+        completeTask,
+        saveReorder
     }
 
     return (
