@@ -24,7 +24,7 @@ function HomePage() {
     <>
       <Header />
       {/* TODO: Import components that create the columns of different tasks*/}
-      <div className="mt-10">
+      <div className="mt-10 pb-20">
         <TaskColumn date={selectedDate} user={user}/>
       </div>
     </>
