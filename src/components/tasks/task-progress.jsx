@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { Progress } from "../ui/progress"
+import { TaskSettingsDialog } from "./task-settings-dialog"
 
 export const TaskProgress = ({ total = 0, completed = 0, className, user, }) => {
 
@@ -7,9 +8,9 @@ export const TaskProgress = ({ total = 0, completed = 0, className, user, }) => 
 
   return (
     <div className={cn("", className)}>
-        <div>
-            <h2>{user.displayName}</h2>
-            {/* Avatar */}
+        <div className="flex items-center justify-between mb-2">
+            <h2 className="text-2xl font-bold">{user.displayName}</h2>
+            <TaskSettingsDialog user={user}/>
         </div>
         <div className="flex items-center justify-between mb-2">
             <span>{completed} / {total}</span>

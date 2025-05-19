@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/authContext";
-import { storage } from "@/lib/firebase";
-import { updateDoc } from "firebase/firestore";
+import { db, storage } from "@/lib/firebase";
+import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Loader2Icon } from "lucide-react";
 import Image from "next/image";
@@ -74,7 +74,7 @@ export const ProfileImageUploader = ({ user, isOwn }) => {
       setImageUploaded(true)
 
       //Update local users avatar image
-      if(!isOwn) {
+      if(isOwn) {
         setUser(prev => ({ ...prev, photoURL }))
       }
 
