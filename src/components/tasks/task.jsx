@@ -2,7 +2,7 @@
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 
-export const Task = ({ task, handleComplete, index }) => {
+export const Task = ({ task, handleComplete, index, accentColor }) => {
   return (
     <Delay delay={ 100 * index }>
       <motion.div 
@@ -15,7 +15,9 @@ export const Task = ({ task, handleComplete, index }) => {
         exit={{ opacity: 0, x: 100 }}
         key={task.id}
         className="p-4 shadow-sm bg-background rounded-lg cursor-pointer"
-        onClick={() => handleComplete(task)}>
+        onClick={() => handleComplete(task)}
+        style={{ backgroundColor: accentColor }}
+        >
           <span className="text-xl font-medium">{task.title}</span>
       </motion.div>
     </Delay>

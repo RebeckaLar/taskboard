@@ -2,7 +2,7 @@ import { GripVerticalIcon } from "lucide-react"
 import { Reorder } from "motion/react"
 import { useState } from "react"
 
-export const TaskReorder = ({ tasks, setTasks, movedTasks }) => {
+export const TaskReorder = ({ tasks, setTasks, movedTasks, accentColor }) => {
 
     const [active, setActive] = useState(null)
 
@@ -53,6 +53,8 @@ export const TaskReorder = ({ tasks, setTasks, movedTasks }) => {
                         onDragEnd={() => setActive(null)} //Remove temporary id when user stops dragging the task
                         value={task}
                         className="flex items-center gap-3 p-4 shadow-sm bg-background rounded-lg cursor-pointer"
+                        style={{ backgroundColor: accentColor }}
+
                     >
                         <GripVerticalIcon className="size-5"/>
                         <span className="text-xl font-medium">{task.title}</span>

@@ -2,6 +2,7 @@ import { ModeToggle } from "@/components/ui/mode-toggle"
 import { UserInfoForm } from "./user-info-form"
 import { ProfileImageUploader } from "./profile-image-uploader"
 import { ChangePasswordForm } from "./change-password-form"
+import { ColorPicker } from "./color-picker"
 
 export const SettingsForm = ({ user, isOwn }) => {
   return (
@@ -18,7 +19,7 @@ export const SettingsForm = ({ user, isOwn }) => {
             }
                 <div className="flex items-center justify-between lg:justify-stretch gap-10">
                     <p className="font-semibold text-lg">Kortfärg:</p>
-                    {/* TODO: gör så man kan ändra kortfärg */}
+                    <ColorPicker user={user}/>
                 </div>
 
                 <UserInfoForm user={user}/>
