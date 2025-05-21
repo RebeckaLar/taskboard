@@ -18,10 +18,10 @@ export const AllUsersTasksList = () => {
     <>
         {
             !!users.length && users.map(user => {
-                // if(user.verified) {
-
-                // }
-                return <TaskColumn key={user.uid} date={selectedDate} user={user} className="w-72"/>
+              //Unverified users are hidden
+                if(user.verified) {
+                  return <TaskColumn key={user.uid} date={selectedDate} user={user} className="w-72"/>
+                }
             })
         }
     </>

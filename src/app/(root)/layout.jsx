@@ -1,11 +1,12 @@
 "use client"
+import { Button } from "@/components/ui/button"
 import { useAuth } from "@/context/authContext"
 import { Loader2Icon } from "lucide-react"
 import { Toaster } from "react-hot-toast"
 
 function ApplicationLayout({ authenticated, notauthenticated }) {
 
-    const { user, authLoaded } = useAuth()
+    const { user, authLoaded, verifyEmail } = useAuth()
 
     // console.log(authLoaded)
 
@@ -18,10 +19,23 @@ function ApplicationLayout({ authenticated, notauthenticated }) {
     }
   return (
     <> 
-        {
+        {/* {
             user === null 
             ? notauthenticated
             : authenticated
+        } */}
+        {
+            user === null 
+            ? notauthenticated
+            : user.verified
+              ? authenticated
+              : (
+                <div className="flex flex-col text-center gap-4 items-center justify-center mt-96">
+                  <h2 className="text-2xl font-bold">Verifiera din e-postadress</h2>
+                  <p>Vi har skickat en verifieringslänk till din e-postadress. Vänligen kontrollera din inkorg.</p>
+                  <Button onClick={verifyEmail}>Skicka igen</Button>
+                </div>
+              )
         }
         <Toaster
           position="top-center"
