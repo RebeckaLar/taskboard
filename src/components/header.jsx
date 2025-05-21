@@ -10,6 +10,7 @@ export const Header = () => {
 
   const searchParams = useSearchParams()
   const date = searchParams.get("date")
+  console.log(date)
   const router = useRouter()
   const pathName = usePathname()
 
