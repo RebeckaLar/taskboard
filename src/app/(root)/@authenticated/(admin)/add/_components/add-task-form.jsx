@@ -79,7 +79,7 @@ const formSchema = z.discriminatedUnion("reoccuring", [
     range
 ])
 
-export const AddTaskForm = () => {
+export const AddTaskForm = ({ isModal }) => {
 
     const searchParams = useSearchParams()
     const presetDate = searchParams.get("date")
@@ -132,7 +132,11 @@ async function onSubmit(values) {
     
         form.reset()
         // TODO: kolla vart router ska pusha beroende på vilken sida man kmr ifrån
-        router.push("/")
+        if(!isModal)
+          router.push("/")
+        else
+          router.back()
+
       } catch (error) {
         console.error(error)
         setErrorMessage("Någonting gick fel, försök igen")
