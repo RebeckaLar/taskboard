@@ -1,7 +1,7 @@
 "use client"
 
 import { auth, db } from "@/lib/firebase"
-import { createUserWithEmailAndPassword, EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
 import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
@@ -193,6 +193,22 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const sendPasswordReset = async (email) => {
+        setLoading(true)
+        const toastId = toast.loading("Laddar...")
+        try {
+            await sendPasswordResetEmail(auth, email)
+            toast.success("Återställningslänk skickad", { id: toastId })
+            return "Återställningslänk skickad"
+        } catch (error) {
+            console.error("Error sending password reset email:", error)
+            toast.error("Någonting gick fel, försök igen", { id: toastId })
+            return "Någonting gick fel, försök igen"
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const value = {
         user,
         setUser,
@@ -204,7 +220,8 @@ export const AuthProvider = ({ children }) => {
         isAdmin,
         updateUser,
         changePassword,
-        verifyEmail
+        verifyEmail,
+        sendPasswordReset
     }
 
     return (
