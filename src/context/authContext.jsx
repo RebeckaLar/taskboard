@@ -1,7 +1,7 @@
 "use client"
 
 import { auth, db } from "@/lib/firebase"
-import { createUserWithEmailAndPassword, EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
 import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
@@ -25,6 +25,12 @@ export const AuthProvider = ({ children }) => {
                 return
             }
             const docRef = doc(db, "users", firebaseUser.uid)
+
+            if(firebaseUser?.emailVerified) { //if the user has clicked on the link
+                await updateDoc(docRef, {
+                    verified: firebaseUser.emailVerified //update the verified-field in the users doc to true
+                }) 
+            }
 
             const getUserDocWithRetry = async (retries = 5, delay = 300) => {
                 let docSnap = null
@@ -59,14 +65,18 @@ export const AuthProvider = ({ children }) => {
         setLoading(true)
 
         try {
+            //CREATE USER:
             const res = await createUserWithEmailAndPassword(auth, email, password)
-            await updateProfile(res.user, { displayName })
+            
+            //UPDATE PROFILE
+            await updateProfile(res.user, { displayName }) 
 
-            if(!res.user) {
+            if(!res.user) { 
                 console.log("No user")
                 return
             }
 
+            //CREATE USER DOC
             // const docRef = doc(db, "users", res.user.uid) //Reference to the doc where I want it saved
             await setDoc(doc(db, "users", res.user.uid), {   //Reference to the doc where I want it saved
                 uid: res.user.uid,
@@ -79,6 +89,8 @@ export const AuthProvider = ({ children }) => {
                 color: "#9dedcc"
 
             })
+
+            await verifyEmail()
 
         } catch (error) {
             console.log("Error registering the user: ", error)
@@ -126,6 +138,29 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const verifyEmail = async () => {
+        const toastId = toast.loading('Skickar länk')
+        const user = auth.currentUser
+
+        if(!user) {
+            console.error("No user currently signed in.")
+            toast.error("Någonting gick fel, försök igen", { id: toastId })
+            return
+        }
+
+        try {
+            await sendEmailVerification(user, {
+                url: `${window.location.origin}/`,
+                handleCodeInApp: false //lets firebase handles user clicking on the verification-mail
+            })
+            toast.success("Verifieringslänk skickas, kolla din epost", { id: toastId })
+
+        } catch (error) {
+            console.error("Error sending email verification: ", error)
+            toast.error("Någonting gick fel, försök igen", { id: toastId })
+        }
+    }
+
     const changePassword = async (currentPassword, newPassword) => {
         setLoading(true)
         const toastId = toast.loading('Laddar...')
@@ -158,6 +193,22 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const sendPasswordReset = async (email) => {
+        setLoading(true)
+        const toastId = toast.loading("Laddar...")
+        try {
+            await sendPasswordResetEmail(auth, email)
+            toast.success("Återställningslänk skickad", { id: toastId })
+            return "Återställningslänk skickad"
+        } catch (error) {
+            console.error("Error sending password reset email:", error)
+            toast.error("Någonting gick fel, försök igen", { id: toastId })
+            return "Någonting gick fel, försök igen"
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const value = {
         user,
         setUser,
@@ -168,7 +219,9 @@ export const AuthProvider = ({ children }) => {
         login,
         isAdmin,
         updateUser,
-        changePassword
+        changePassword,
+        verifyEmail,
+        sendPasswordReset
     }
 
     return (
