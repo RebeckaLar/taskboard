@@ -18,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/context/authContext"
 import { getErrorMessage } from "@/lib/getFirebaseError"
+import { ResetPasswordDialog } from "./reset-password-dialog"
+import { usePasswordReset } from "@/context/passord-reset-context"
 
 export const loginFormSchema = z.object({
   email: z.string().email({ message: "Du måste ange en giltig epostadress" }),
@@ -28,6 +30,7 @@ export const LoginForm = ({ changeForm, form }) => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const { loading, login } = useAuth()
+  const { setOpen } = usePasswordReset()
 
   // const form = useForm({
   //   resolver: zodResolver(loginFormSchema),
@@ -76,6 +79,8 @@ export const LoginForm = ({ changeForm, form }) => {
                 <Input type="password" className="not-dark:border-gray-300" {...field} />
               </FormControl>
               <FormMessage />
+              <p>Glömt ditt lösenord? <span onClick={() => setOpen(true)} className="underline cursor-pointer">Skicka återhällningslänk</span></p>
+              {/* <p>Glömt ditt lösenord? <ResetPasswordDialog /></p> */}
             </FormItem>
           )}
         />
