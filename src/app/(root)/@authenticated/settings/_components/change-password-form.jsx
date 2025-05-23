@@ -42,7 +42,6 @@ export const ChangePasswordForm = ({ className }) => {
 
     // 2. Define a submit handler.
     function onSubmit(values) {
-      console.log(values)
       changePassword(values.currentPassword, values.newPassword)
     }
 

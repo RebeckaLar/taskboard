@@ -3,7 +3,8 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { useAuth } from "./authContext"
 import { db } from "@/lib/firebase"
-import { collection, onSnapshot, query } from "firebase/firestore"
+import { collection, doc, onSnapshot, query, updateDoc } from "firebase/firestore"
+import toast from "react-hot-toast"
 
 const UsersContext = createContext()
 
@@ -33,10 +34,41 @@ export const UsersProvider = ({ children }) => {
     return () => unsub()
         
     }, [isAdmin]) //if admin, run the use effect again
+
+    const changeRole = async (uid, role) => {
+        if(!isAdmin()) {
+            toast.error("Du saknar behörighet att göra detta")
+            return
+        }
+        if(role !== "admin" && role !== "user") {
+            toast.error("Ogiltig roll angiven")
+            return
+        }
+
+        const numberOfAdmins = users.filter(user => user.role === "admin").length
+        if(numberOfAdmins <= 1 && role === "user") {
+            toast.error("Det måste finnas minst en admin")
+            return
+        }
+        setLoading(true)
+        try {
+            const userRef = doc(db, "users", uid)
+            await updateDoc(userRef, { role })
+            toast.success(`Användaren har nu ${role}-behörighet`)
+        } catch (error) {
+            console.error("Error updating user role: ", error)
+            toast.error("Någonting gick fel, försök igen")
+        } finally {
+            setLoading(false)
+        }
+
+
+    }
     
     const value = {
         users,
-        loading
+        loading,
+        changeRole
     }
 
     return (

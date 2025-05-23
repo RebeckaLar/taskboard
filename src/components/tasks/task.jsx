@@ -2,6 +2,7 @@
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 
+//ANIMATIONS FOR TASKS
 export const Task = ({ task, handleComplete, index, accentColor }) => {
   return (
     <Delay delay={ 100 * index }>

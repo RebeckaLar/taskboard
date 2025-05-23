@@ -19,8 +19,8 @@ export const AvatarDropdown = () => {
 
 
     const { user, logout, isAdmin } = useAuth()
-    console.log(user.photoURL)
-    console.log(user)
+    // console.log(user.photoURL)
+    // console.log(user)
 
   return (
     <DropdownMenu>

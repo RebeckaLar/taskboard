@@ -55,6 +55,7 @@ export const TasksProvider = ({ children }) => {
             const newTask = {
                 ...taskData,
                 date: format(taskData.date, "yyyy-MM-dd"),
+                // time: format(taskData.date, "HH:mm"),
                 order: getNextOrder(),
                 completed: false,
                 createdAt: serverTimestamp()

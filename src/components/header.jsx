@@ -10,7 +10,7 @@ export const Header = () => {
 
   const searchParams = useSearchParams()
   const date = searchParams.get("date")
-  console.log(date)
+  // console.log(date)
   const router = useRouter()
   const pathName = usePathname()
 
@@ -27,7 +27,7 @@ export const Header = () => {
   const navigateToDate = (newDate) => {
     const formatted = format(newDate, "yyyy-MM-dd")
     const params = new URLSearchParams(searchParams.toString())
-    console.log(formatted)
+    // console.log(formatted)
     params.set("date", formatted)
     router.push(`${pathName}?${params.toString()}`)
   }
