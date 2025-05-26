@@ -19,7 +19,10 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
         onClick={() => handleComplete(task)}
         style={{ backgroundColor: accentColor }}
         >
-          <span className="text-xl font-medium">{task.title}</span>
+          <div className="flex justify-between">
+            <span className="text-xl font-normal">{task.title}</span>
+            <span className="text-xl font-semibold">{task.time}</span>
+          </div>
       </motion.div>
     </Delay>
   )
