@@ -47,7 +47,6 @@ export const LoginForm = ({ changeForm, form }) => {
       const errorMessage = getErrorMessage(error.code)
       setErrorMessage(errorMessage)
     }
-    console.log(values)
   }
 
   return (

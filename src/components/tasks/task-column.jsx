@@ -15,13 +15,13 @@ import { PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
 
+// CREATES THE COLUMNS OF DIFFERENT USERS TASKS
 export const TaskColumn = ({ user, date, className }) => {
 
     const [isReordering, setIsReordering, saveReorder] = useState(false)
     const [localTasks, setLocalTasks] = useState([]) //fyll i med tasks när vi börjar sortera
 
-    //To avoid updating EVERY task, and only the actually moved tasks:
-    //Not using usestate
+    //To avoid updating EVERY task, and only the actually moved tasks,
     const movedTasks = useRef([])
 
     const { getTasksByUserForDate, completeTask } = useTasks()

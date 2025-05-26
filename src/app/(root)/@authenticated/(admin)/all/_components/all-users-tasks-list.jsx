@@ -8,9 +8,11 @@ import { useSearchParams } from "next/navigation"
 export const AllUsersTasksList = () => {
     const searchParams = useSearchParams()
     const date = searchParams.get("date")
+
     const parsed = date
     ? parse(date, "yyyy-MM-dd", new Date())
     : new Date()
+
     const selectedDate = isValid(parsed) ? parsed : new Date()
 
     const { users } = useUsers()

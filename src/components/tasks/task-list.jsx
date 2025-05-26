@@ -8,7 +8,7 @@ export const TaskList = ({ tasks, handleComplete, accentColor }) => {
       <AnimatePresence mode="popLayout">
         {
           tasks.map((task, index)=> (
-            <Task key={task.id} task={task} handleComplete={handleComplete} accentColor={accentColor} index={index}/>
+            <Task key={task.id} task={task} time={task.time} handleComplete={handleComplete} accentColor={accentColor} index={index}/>
           ))
         }
       </AnimatePresence>

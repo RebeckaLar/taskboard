@@ -1,8 +1,14 @@
 "use client"
+import { useTasks } from "@/context/tasksContext"
+import { format } from "date-fns"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 
+//ANIMATIONS FOR TASKS
 export const Task = ({ task, handleComplete, index, accentColor }) => {
+
+  const { time } = useTasks()
+
   return (
     <Delay delay={ 100 * index }>
       <motion.div 
@@ -18,7 +24,10 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
         onClick={() => handleComplete(task)}
         style={{ backgroundColor: accentColor }}
         >
-          <span className="text-xl font-medium">{task.title}</span>
+          <div className="flex justify-between">
+            <span className="text-xl font-normal">{task.title}</span>
+            <span className="text-xl font-semibold">{task.time.toString()}</span>
+          </div>
       </motion.div>
     </Delay>
   )
