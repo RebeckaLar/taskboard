@@ -43,19 +43,15 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { eachDayOfInterval, parse } from "date-fns"
 import { useState } from "react"
 import { useUsers } from "@/context/usersContext"
-import Link from "next/link"
 import { Calendar } from "@/components/ui/calendar"
 import { useTasks } from "@/context/tasksContext"
 
-//
 import { format } from "date-fns";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { toast } from "sonner";
 
 const base = z.object({
     title: z.string().nonempty({ message: "Uppgift är obligatorisk" }),
     ownerId: z.string().nonempty({ message: "Du måste välja en användare" }),
-    // time: z.date()
     time: z.date()
 })
 
@@ -90,7 +86,6 @@ export const AddTaskForm = ({ isModal }) => {
     const searchParams = useSearchParams()
     const presetDate = searchParams.get("date")
     const presetUserId = searchParams.get("userId")
-    const presetTime = searchParams.get("time")
  
 
     const { users } = useUsers()
@@ -99,7 +94,7 @@ export const AddTaskForm = ({ isModal }) => {
     const [errorMessage, setErrorMessage] = useState(null)
     const router = useRouter()
 
-  // 1. Define your form.
+  // DEFINING FORM FOR ADDING A TASK:
 const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -107,8 +102,6 @@ const form = useForm({
        ownerId: presetUserId ?? "",
        reoccuring: "none",
        date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date(),
-      //  time: presetTime ? parse(presetTime, "HH:mm", new Date()) ?? new Date() : new Date(),
-      // time: ""
     },
   })
 
@@ -139,12 +132,8 @@ async function onSubmit(values) {
                 days.map(d => addTask({ ...base, date: d}))
             )
         }
-        // DISPLAY DATE AND TIME FORMAT
-        // toast.success(`Selected time: ${format(values.time, "PPPP HH:mm")}`);
     
-        console.log(onSubmit)
         form.reset()
-        // TODO: kolla vart router ska pusha beroende på vilken sida man kmr ifrån
         if(!isModal)
           router.push("/")
         else
@@ -157,14 +146,6 @@ async function onSubmit(values) {
       }
   }
 
-  // HANDLE DATE AND TIME SELECT
-
-  //   function handleTimeSelect(time = Date()) {
-  //   if (time) {
-  //     form.setValue("time", time);
-  //   }
-  // }
-
     function handleTimeChange(type, value) {
     const currentTime = form.getValues("time") || new Date();
     let newTime = new Date(currentTime);
@@ -174,10 +155,7 @@ async function onSubmit(values) {
       newTime.setHours(hour);
     } else if (type === "minute") {
       newTime.setMinutes(parseInt(value, 10));
-    }
-
-    // let timeFormat = (format(newTime, "HH:mm"))
- 
+    } 
     form.setValue("time", newTime, format(newTime, "HH:mm"));
     console.log(format(newTime, "HH:mm"))
   }
@@ -270,6 +248,7 @@ async function onSubmit(values) {
           />
 
 
+        {/* CHOOSE TASK REPETITION: */}
         <FormField
           control={form.control}
           name="reoccuring"
@@ -298,16 +277,74 @@ async function onSubmit(values) {
           )}
         />
 
-
+      {/* CHOOSE DEADLINE: */}
+      <div className="deadline sm:flex sm:justify-center justify-items-center sm:gap-10">
+          {/* DATE (CALENDAR) */}
+        {
+            reoccuringType === "none" && (
+                <FormField
+                    control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                      <>
+                        <FormItem>
+                             <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                            />
+                            <FormMessage />
+                        </FormItem>
+                        </>
+                    )}
+                />
+            )
+        }
+        {
+            reoccuringType === "multiple" && (
+                <FormField
+                    control={form.control}
+                    name="dateMultiple"
+                    render={({ field }) => (
+                        <FormItem>
+                             <Calendar
+                                mode="multiple"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                            />
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            )
+        }
+        {
+            reoccuringType === "range" && (
+                <FormField
+                    control={form.control}
+                    name="dateRange"
+                    render={({ field }) => (
+                        <FormItem>
+                             <Calendar
+                                mode="range"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                            />
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            )
+        }
+        {/* TIME DEADLINE */}
         <FormField
-          //control={form.control}
+          control={form.control}
           name="time"
           render={({ field }) => (
-                <FormItem className="flex flex-col">
-                <FormLabel>Tid</FormLabel>
+                <FormItem className="flex flex-col p-3">
+                <FormLabel className="w-full pt-2">Tid</FormLabel>
                   <div className="w-auto p-0">
-                    {/* <div className="sm:flex"> */}
-                      <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
+                      <div className="flex flex-col sm:flex-row sm:h-[230px] divide-y sm:divide-y-0 sm:divide-x">
                         <ScrollArea className="w-64 sm:w-auto">
                           <div className="flex sm:flex-col p-2" >
                             {Array.from({ length: 24 }, (_, i) => i)
@@ -367,69 +404,11 @@ async function onSubmit(values) {
                         </ScrollArea>
                       </div>
                       </div>
-                    {/* </div> */}
                   <FormMessage />
                 </FormItem>
           )}
         />
-
-{/* CALENDAR: */}
-        {
-            reoccuringType === "none" && (
-                <FormField
-                    control={form.control}
-                    name="date"
-                    render={({ field }) => (
-                      <>
-                        <FormItem>
-                             <Calendar
-                                mode="single"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                            />
-                            <FormMessage />
-                        </FormItem>
-                        </>
-                    )}
-                />
-            )
-        }
-        {
-            reoccuringType === "multiple" && (
-                <FormField
-                    control={form.control}
-                    name="dateMultiple"
-                    render={({ field }) => (
-                        <FormItem>
-                             <Calendar
-                                mode="multiple"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                            />
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            )
-        }
-        {
-            reoccuringType === "range" && (
-                <FormField
-                    control={form.control}
-                    name="dateRange"
-                    render={({ field }) => (
-                        <FormItem>
-                             <Calendar
-                                mode="range"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                            />
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            )
-        }
+        </div>
             { errorMessage && <p className="text-red-500 text-sm">{ errorMessage }</p>}
             <Button disabled={loading || submitted} type="submit">{ loading ? "Skapar..." : "Skapa uppgift" }</Button>
           </form>

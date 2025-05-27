@@ -15,8 +15,10 @@ export const TasksProvider = ({ children }) => {
     const { isAdmin, authLoaded, user } = useAuth()
 
     useEffect(() => {
+        console.log(loading)
         if(!authLoaded || !user) return //If downloading db is not finished, or if there are no users, return. Otherwise:
         setLoading(true)
+        console.log(loading)
         let q
 
         if(isAdmin()) { //Query as admin (get ALL tasks):
