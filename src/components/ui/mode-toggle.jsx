@@ -19,13 +19,13 @@ export function ModeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {/* <Button variant="outline" size="icon"> */}
-        <Button variant="ghost">
+        <Button variant="ghost flex justify-between">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <p className="capitalize text-lg">
             {
                 theme === "system" ? "System" :
-                    theme === "dark" ? "Mörkt" : "Ljust"
+                    theme === "dark" ? "Dark" : "Light"
             }
           </p>
           <span className="sr-only">Toggle theme</span>
@@ -33,10 +33,10 @@ export function ModeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Ljust
+          Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Mörkt
+          Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           System
