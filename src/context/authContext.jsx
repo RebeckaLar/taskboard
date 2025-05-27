@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
     const [authLoaded, setAuthLoaded] = useState(false)
 
     const router = useRouter()
-    // console.log(user)
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -47,17 +46,14 @@ export const AuthProvider = ({ children }) => {
             }
 
             const docSnap = await getUserDocWithRetry()
-
             if(docSnap && docSnap.exists()) {
                 setUser(docSnap.data())
             } else {
-                console.warn("Användardokument kunde inte hämtas")
+                console.warn("Could not get user doc")
                 setUser(null)
             }
-
             setAuthLoaded(true)
         })
-
         return () => unsub()
     }, [])
 
@@ -68,7 +64,7 @@ export const AuthProvider = ({ children }) => {
             //CREATE USER:
             const res = await createUserWithEmailAndPassword(auth, email, password)
             
-            //UPDATE PROFILE
+            //UPDATE PROFILE:
             await updateProfile(res.user, { displayName }) 
 
             if(!res.user) { 
@@ -76,9 +72,8 @@ export const AuthProvider = ({ children }) => {
                 return
             }
 
-            //CREATE USER DOC
-            // const docRef = doc(db, "users", res.user.uid) //Reference to the doc where I want it saved
-            await setDoc(doc(db, "users", res.user.uid), {   //Reference to the doc where I want it saved
+            //CREATE USER DOC:
+            await setDoc(doc(db, "users", res.user.uid), { //Reference to the doc where I want it saved
                 uid: res.user.uid,
                 email: res.user.email,
                 displayName: res.user.displayName,
@@ -129,9 +124,9 @@ export const AuthProvider = ({ children }) => {
             const userRef = doc(db, "users", user.uid)
             await updateDoc(userRef, newUserData)
             setUser((prevUser) => ({ ...prevUser, ...newUserData }))
-            toast.success("Profilen uppdaterad", { id: toastId })
+            toast.success("Profile updated", { id: toastId })
         } catch (error) {
-            toast.error("Någontin gick fel, försök igen", { id: toastId })
+            toast.error("Something went wrong, please try again", { id: toastId })
             console.log("Error updating the user: ", error)
         } finally {
             setLoading(false)
@@ -139,12 +134,12 @@ export const AuthProvider = ({ children }) => {
     }
 
     const verifyEmail = async () => {
-        const toastId = toast.loading('Skickar länk')
+        const toastId = toast.loading('Sending link...')
         const user = auth.currentUser
 
         if(!user) {
             console.error("No user currently signed in.")
-            toast.error("Någonting gick fel, försök igen", { id: toastId })
+            toast.error("Something went wrong, please try again", { id: toastId })
             return
         }
 
@@ -153,40 +148,38 @@ export const AuthProvider = ({ children }) => {
                 url: `${window.location.origin}/`,
                 handleCodeInApp: false //lets firebase handles user clicking on the verification-mail
             })
-            toast.success("Verifieringslänk skickas, kolla din epost", { id: toastId })
+            toast.success("Verification link sent, please check email", { id: toastId })
 
         } catch (error) {
             console.error("Error sending email verification: ", error)
-            toast.error("Någonting gick fel, försök igen", { id: toastId })
+            toast.error("Something went wrong, please try again", { id: toastId })
         }
     }
 
     const changePassword = async (currentPassword, newPassword) => {
         setLoading(true)
-        const toastId = toast.loading('Laddar...')
+        const toastId = toast.loading('Loading...')
         const user = auth.currentUser
 
         if(!user) {
-            console.error("Ingen användare är inloggad")
-            toast.error("Ingen användare är inloggad", { id: toastId })
+            console.error("No user logged in")
+            toast.error("No user logged in", { id: toastId })
             return
         }
 
         try {
             const userCredential = await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, currentPassword))
             await updatePassword(userCredential.user, newPassword)
-            toast.success("Lösenordet har uppdaterats", { id: toastId })
+            toast.success("Password updated", { id: toastId })
         } catch (error) {
             console.error("Error reauthenticating user: ", error)
             if(error.code === "auth/invalid-credential") {
-                toast.error("Felaktigt lösenord", { id: toastId })
+                toast.error("Wrong password", { id: toastId })
               } else if(error.code === "auth/weak-password") {
-                toast.error("Lösenordet är för svagt", { id: toastId })
+                toast.error("Weak password", { id: toastId })
               } else {
-                toast.error("Mågonting gick fel, försök igen", { id: toastId })
+                toast.error("Something went wrong, please try again", { id: toastId })
               }
-
-              
             throw error 
         } finally {
             setLoading(false)
@@ -195,15 +188,15 @@ export const AuthProvider = ({ children }) => {
 
     const sendPasswordReset = async (email) => {
         setLoading(true)
-        const toastId = toast.loading("Laddar...")
+        const toastId = toast.loading("Loading...")
         try {
             await sendPasswordResetEmail(auth, email)
-            toast.success("Återställningslänk skickad", { id: toastId })
-            return "Återställningslänk skickad"
+            toast.success("Password recovery link sent", { id: toastId })
+            return "Password recovery link sent"
         } catch (error) {
             console.error("Error sending password reset email:", error)
-            toast.error("Någonting gick fel, försök igen", { id: toastId })
-            return "Någonting gick fel, försök igen"
+            toast.error("Something went wrong, please try again", { id: toastId })
+            return "Something went wrong, please try again"
         } finally {
             setLoading(false)
         }

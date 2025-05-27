@@ -4,7 +4,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
@@ -13,14 +12,9 @@ import { useAuth } from "@/context/authContext"
 import { LogOutIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
 
-  
-
 export const AvatarDropdown = () => {
 
-
     const { user, logout, isAdmin } = useAuth()
-    // console.log(user.photoURL)
-    // console.log(user)
 
   return (
     <DropdownMenu>
@@ -28,26 +22,27 @@ export const AvatarDropdown = () => {
         {/* AVATAR ICON */}
         <DropdownMenuTrigger>
             <Avatar className="size-9 cursor-pointer">
-                {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
                 <AvatarImage src={user?.photoURL || ""} className="h-full w-full object-cover"/>
                 <AvatarFallback className="bg-gray-700/30">{user?.displayName?.slice(0,2).toUpperCase() || "JD"}</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>
 
-        {/* DROPDOWN MENU */}
+    {/* DROPDOWN MENU */}
         <DropdownMenuContent align="end" className="w-44">
+
+            {/* Admin button: See all tasks */}
             {
                 isAdmin() && (
                    <>  
                     <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer md:hidden">
                         <Link href="/all" className="flex items-center gap-2 text-xl md:text-base">
-                            Alla
+                            All tasks
                         </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer md:hidden">
                         <Link href="/add" className="flex items-center gap-2 text-xl md:text-base">
-                            Lägg till uppgift
+                            Add task
                         </Link>
                     </DropdownMenuItem>
 
@@ -56,18 +51,19 @@ export const AvatarDropdown = () => {
                 )
             }
 
+            {/* Settings button */}
             <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer">
                 <Link href="/settings" className="flex items-center gap-2 text-xl md:text-base">
                     <SettingsIcon className="size-5 md:size-4"/>
-                    Inställningar
+                    Settings
                 </Link>
             </DropdownMenuItem>
 
-        {/* LOG OUT BUTTON */}
+            {/* Log out button */}
             <DropdownMenuItem onClick={logout} className="not-dark:hover:bg-gray-200 cursor-pointer">
                 <Link href="/settings" className="flex items-center gap-2 text-xl md:text-base">
                     <LogOutIcon className="size-5 md:size-4"/>
-                    Logga ut
+                    Log out
                 </Link>
             </DropdownMenuItem>
 

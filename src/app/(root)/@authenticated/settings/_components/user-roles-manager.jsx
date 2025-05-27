@@ -5,16 +5,13 @@ import { useAuth } from "@/context/authContext"
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { useUsers } from "@/context/usersContext"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 export const UserRolesManager = () => {
@@ -28,13 +25,13 @@ export const UserRolesManager = () => {
     <div className="mt-10">
       <div className="mb-10">
         <p className="font-semibold text-lg text-center">Admin</p>
-        <p className="text-sm text-muted-foreground text-center">Här kan du ändra på användares behörigheter</p>
+        <p className="text-sm text-muted-foreground text-center">Set user permissions</p>
       </div>
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[120px]">Användarnamn</TableHead>
-          <TableHead className="w-[180px] sm:w-auto">E-post</TableHead>
+          <TableHead className="w-[120px]">Username</TableHead>
+          <TableHead className="w-[180px] sm:w-auto">E-mail</TableHead>
           <TableHead>Roll</TableHead>
           <TableHead className="text-right"></TableHead>
         </TableRow>
@@ -50,10 +47,10 @@ export const UserRolesManager = () => {
             </TableCell>
             <TableCell>
               <Badge className={user.role === "admin" && "bg-blue-600 text-white" }>
-                { user.role  === "admin" ? "Admin" : "Användare" }
+                { user.role  === "admin" ? "Admin" : "User" }
               </Badge>
             </TableCell>
-            <TableCell className="text-wight">
+            <TableCell className="text-left">
               <Button 
               variant={user.role === "admin" ? "destructive" : "default"}
               size="sm"
@@ -62,10 +59,10 @@ export const UserRolesManager = () => {
               >
                 {
                   loading
-                    ? "Laddar..."
+                    ? "Loading..."
                     : user.role === "admin"
-                      ? "Ta bort admin"
-                      : "Gör till admin"
+                      ? "Remove admin"
+                      : "Make admin"
                 }
               </Button>
             </TableCell>

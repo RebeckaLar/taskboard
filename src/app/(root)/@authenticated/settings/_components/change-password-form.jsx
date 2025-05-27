@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,8 +17,8 @@ import { useAuth } from "@/context/authContext"
 import { cn } from "@/lib/utils"
 
 const formSchema = z.object({
-    currentPassword: z.string().nonempty({ message: "Nuvarande lösenord krävs"}),
-    newPassword: z.string().min(6, { message: "Minst 6 tecken krävs"}),
+    currentPassword: z.string().nonempty({ message: "Current password required"}),
+    newPassword: z.string().min(6, { message: "At least 6 characters required"}),
     confirmPassword: z.string()
 }).refine(data => data.newPassword === data.confirmPassword, {
     message: "Lösenorden matchar inte",
@@ -47,7 +46,7 @@ export const ChangePasswordForm = ({ className }) => {
 
   return (
     <div className={cn("border p-4 rounded-2xl not-dark:border-gray-300", className)}>
-      <h2 className="text-center front-semibold text-2xl mb-5">Byt lösenord</h2>
+      <h2 className="text-center front-semibold text-2xl mb-5">Change password</h2>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
@@ -55,7 +54,7 @@ export const ChangePasswordForm = ({ className }) => {
           name="currentPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nuvarande lösenord: </FormLabel>
+              <FormLabel>Current password: </FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
@@ -68,7 +67,7 @@ export const ChangePasswordForm = ({ className }) => {
           name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nytt lösenord:</FormLabel>
+              <FormLabel>New password:</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
@@ -81,7 +80,7 @@ export const ChangePasswordForm = ({ className }) => {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Bekräfta lösenord:</FormLabel>
+              <FormLabel>Confirm password:</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
@@ -90,7 +89,7 @@ export const ChangePasswordForm = ({ className }) => {
           )}
         />
         
-        <Button disabled={loading} type="submit" className="self-end">{ loading ? 'Laddar...' : 'Ändra'}</Button>
+        <Button disabled={loading} type="submit" className="self-end">{ loading ? 'Loading...' : 'Save changes'}</Button>
       </form>
     </Form>
     </div>
