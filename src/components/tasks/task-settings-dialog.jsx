@@ -1,12 +1,10 @@
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,14 +13,11 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { SettingsForm } from "@/app/(root)/@authenticated/settings/_components/settings-form"
 
@@ -42,13 +37,9 @@ export function TaskSettingsDialog({ user }) {
         </DialogTrigger>
         <DialogContent >
           <DialogHeader>
-            <DialogTitle>Inställningar</DialogTitle>
-            {/* <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription> */}
+            <DialogTitle>Settings</DialogTitle>
           </DialogHeader>
           <SettingsForm user={user}/>
-          {/* <ProfileForm /> */}
         </DialogContent>
       </Dialog>
     )
@@ -64,7 +55,7 @@ export function TaskSettingsDialog({ user }) {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Inställningar</DrawerTitle>
+          <DrawerTitle>Settings</DrawerTitle>
         </DrawerHeader>
         <div className="p-4 h-[80svh] overflow-y-auto">
           <SettingsForm user={user}/>
