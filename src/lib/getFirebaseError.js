@@ -1,16 +1,16 @@
 export const getErrorMessage = (errorCode) => {
     switch(errorCode) {
         case "auth/email-already-in-use":
-            return "E-postadressen används redan av ett annat konto.";
+            return "E-mail already in use by another account.";
 
         case "auth/invalid-credential":
-            return "Fel e-postadress eller lösenord.";
+            return "Wrong e-mail or password.";
 
         case "auth/weak-password":
-            return "Lösenordet är för svagt. Vänligen välj ett starkare lösenord.";
+            return "Please create a stronger password.";
 
         default:
-            return "Ett okänt fel inträffade. Försök igen senare";
+            return "Uknown error. Please try again later.";
 
     }
 }

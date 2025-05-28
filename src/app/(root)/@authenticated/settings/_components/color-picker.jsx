@@ -15,7 +15,6 @@ export const ColorPicker = ({ className, user }) => {
     const { updateUser } = useAuth()
 
     const handleColorChange = async () => {
-        console.log('hejhejhejhj')
         setIsOpen(false)
         if(color === user.color) return
         await updateUser(user, { color })
@@ -62,5 +61,3 @@ export const ColorPicker = ({ className, user }) => {
     </>
   )
 }
-//Problem med native input type="color" är att den sparas i databasen varje gång man rör musen runt i color picker, blir mycket.
-//Kanske spara knapp isf

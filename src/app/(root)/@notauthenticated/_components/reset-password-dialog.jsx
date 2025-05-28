@@ -6,27 +6,21 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -40,7 +34,6 @@ import { useAuth } from "@/context/authContext"
 import { useState } from "react"
 
 export function ResetPasswordDialog() {
-  // const [open, setOpen] = React.useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const { open, setOpen } = usePasswordReset()
 
@@ -50,7 +43,7 @@ export function ResetPasswordDialog() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Ange din e-postadress</DialogTitle>
+            <DialogTitle>Enter your e-mail</DialogTitle>
           </DialogHeader>
           <ProfileForm />
         </DialogContent>
@@ -62,12 +55,12 @@ export function ResetPasswordDialog() {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerContent className="top-[40%]">
         <DrawerHeader className="text-left">
-          <DrawerTitle>Ange din e-postadress</DrawerTitle>
+          <DrawerTitle>Enter your e-mail</DrawerTitle>
         </DrawerHeader>
         <ProfileForm className="px-4" />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">Avbryt</Button>
+            <Button variant="outline">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -76,7 +69,7 @@ export function ResetPasswordDialog() {
 }
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Ogiltig e-postadress"})
+  email: z.string().email({ message: "Invalid e-mail"})
 })
 
 function ProfileForm({ className }) {
@@ -99,18 +92,6 @@ function ProfileForm({ className }) {
   }
 
   return (
-    // <form className={cn("grid items-start gap-4", className)}>
-    //   <div className="grid gap-2">
-    //     <Label htmlFor="email">Email</Label>
-    //     <Input type="email" id="email" defaultValue="shadcn@example.com" />
-    //   </div>
-    //   <div className="grid gap-2">
-    //     <Label htmlFor="username">Username</Label>
-    //     <Input id="username" defaultValue="@shadcn" />
-    //   </div>
-    //   <Button type="submit">Save changes</Button>
-    // </form>
-
      <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-8", className)}>
         <FormField
@@ -118,7 +99,7 @@ function ProfileForm({ className }) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>E-postadress</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
                 <Input type="email" className="not-dark:border-gray-300" {...field} />
               </FormControl>
@@ -127,7 +108,7 @@ function ProfileForm({ className }) {
           )}
         />
         { message && <p className="text-sm">{message}</p>}
-        <Button disabled={loading || submitted} type="submit" className="w-full">{ loading ? 'Skickar...' : 'Skicka'}</Button>
+        <Button disabled={loading || submitted} type="submit" className="w-full">{ loading ? 'Sending...' : 'Send'}</Button>
       </form>
     </Form>
   )

@@ -119,14 +119,14 @@ export const AuthProvider = ({ children }) => {
 
     const updateUser = async (user, newUserData) => {
         setLoading(true)
-        const toastId = toast.loading('Laddar...')
+        const toastId = toast.loading('Loading...')
         try {
             const userRef = doc(db, "users", user.uid)
             await updateDoc(userRef, newUserData)
             setUser((prevUser) => ({ ...prevUser, ...newUserData }))
             toast.success("Profile updated", { id: toastId })
         } catch (error) {
-            toast.error("Something went wrong, please try again", { id: toastId })
+            toast.error("Something went wrong, try again", { id: toastId })
             console.log("Error updating the user: ", error)
         } finally {
             setLoading(false)

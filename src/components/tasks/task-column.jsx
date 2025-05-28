@@ -19,7 +19,7 @@ import { format } from "date-fns"
 export const TaskColumn = ({ user, date, className }) => {
 
     const [isReordering, setIsReordering, saveReorder] = useState(false)
-    const [localTasks, setLocalTasks] = useState([]) //fyll i med tasks när vi börjar sortera
+    const [localTasks, setLocalTasks] = useState([]) //Save tasks here when sorting
 
     //To avoid updating EVERY task, and only the actually moved tasks,
     const movedTasks = useRef([])
@@ -41,10 +41,10 @@ export const TaskColumn = ({ user, date, className }) => {
         }
     }
 
-    //Djup kopia av "tasks". Vill inte ha shallow obj som pekar på samma ref obj, utan helt ny kopia:
+    // Deep copy of "tasks". Avoiding shallow object pointing to the same reference obj
     const startReorder = () => {
         const deep = tasks
-        .filter(t => !t.completed) //Return  non-completed tasks
+        .filter(t => !t.completed) //Return non-completed tasks
         .map(t => ({ ...t }))
 
         movedTasks.current = []
@@ -52,8 +52,8 @@ export const TaskColumn = ({ user, date, className }) => {
     }
 
     const handleCheckChange = (checked) => {
-        if(!checked) { //Om inte completed
-            //spara ordningen till databasen
+        if(!checked) { //If task is not completed,
+            //save the sort to db
             const payload = movedTasks.current.filter(mt => {
             const original = localTasks.find(t => t.id === mt.id)
             return original && original.order !== mt.newOrder
@@ -95,7 +95,7 @@ export const TaskColumn = ({ user, date, className }) => {
         {
             isAdmin() && (
                 <div className="flex items-center justify-between mb-5" style={{ "--track": accentColorIntense ?? "#99a1af" }}>
-                    <span className="font-medium">Sortera</span>
+                    <span className="font-medium">Sort</span>
                     <Switch 
                         checked={isReordering}
                         onCheckedChange={handleCheckChange}
@@ -121,7 +121,7 @@ export const TaskColumn = ({ user, date, className }) => {
                     className="border-4 border-primary rounded-full p-2 size-12 hover:bg-[color:var(--track)] hover:text-secondary transition-colors"
                     style={{ borderColor: accentColorIntense, color: textColor, "--track": accentColor }}
                     >
-                        <Link href={`/add?date=${format(date, "yyyy-MM-dd")}&userId=${user.uid}`} aria-label="Lägg till uppgift">
+                        <Link href={`/add?date=${format(date, "yyyy-MM-dd")}&userId=${user.uid}`} aria-label="Add a task">
                             <PlusIcon className="size-6"/>
                         </Link>
                     </Button>

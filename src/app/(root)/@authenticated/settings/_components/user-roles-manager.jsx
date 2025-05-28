@@ -32,7 +32,7 @@ export const UserRolesManager = () => {
         <TableRow>
           <TableHead className="w-[120px]">Username</TableHead>
           <TableHead className="w-[180px] sm:w-auto">E-mail</TableHead>
-          <TableHead>Roll</TableHead>
+          <TableHead>Role</TableHead>
           <TableHead className="text-right"></TableHead>
         </TableRow>
       </TableHeader>
