@@ -34,7 +34,7 @@ export const ProfileImageUploader = ({ user, isOwn }) => {
     if(!pickedFile) return
 
     if(!MIME_RX.test(pickedFile.type)) {
-      setError("Välj PNG, JPEG eller WEBP")
+      setError("Valid types: PNG, JPEG or WEBP")
       return
     }
     if(pickedFile.size > MAX_B) {
@@ -80,7 +80,7 @@ export const ProfileImageUploader = ({ user, isOwn }) => {
 
     } catch (error) {
       console.error(error)
-      setError("Fel vid uppladdning - försök igen")
+      setError("Error updating picture, please try again")
     } finally {
       setLoading(false)
     }
@@ -95,7 +95,7 @@ export const ProfileImageUploader = ({ user, isOwn }) => {
           <div className="relative">
             <label htmlFor="image-pick" className="block border rounded-lg aspect-square sm:w-80 overflow-hidden">
               <Image
-                alt="Profilbild"
+                alt="Profile picture."
                 src={preview}
                 width={320}
                 height={320}
@@ -116,7 +116,7 @@ export const ProfileImageUploader = ({ user, isOwn }) => {
               {
                 file && !imageUploaded && (
                   <Button className="mt-4" disabled={loading} onClick={handleUpload}>
-                    { loading ? 'Laddar upp...' : 'Spara'}
+                    { loading ? 'Uploading...' : 'Save'}
                   </Button>
                 )
               }
@@ -128,7 +128,7 @@ export const ProfileImageUploader = ({ user, isOwn }) => {
           htmlFor="image-pick" 
           className="border border-foreground/30 rounded-lg aspect-square flex items-center justify-center bg-gray-500/20 hover:bg-foreground/30 transition-colors cursor-pointer p-10 sm:w-50 mx-auto"
           >
-            <p className="text-muted-foreground group-hover:text-foreground trainsition-colors">Välj bild</p>
+            <p className="text-muted-foreground group-hover:text-foreground trainsition-colors">Choose image</p>
           </label>
         )
       }

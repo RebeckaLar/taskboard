@@ -21,7 +21,7 @@ const formSchema = z.object({
     newPassword: z.string().min(6, { message: "At least 6 characters required"}),
     confirmPassword: z.string()
 }).refine(data => data.newPassword === data.confirmPassword, {
-    message: "Lösenorden matchar inte",
+    message: "Password is not matching.",
     path: ["confirmPassword"]
 })
 

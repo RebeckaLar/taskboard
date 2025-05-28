@@ -37,27 +37,27 @@ export const UsersProvider = ({ children }) => {
 
     const changeRole = async (uid, role) => {
         if(!isAdmin()) {
-            toast.error("Du saknar behörighet att göra detta")
+            toast.error("You need permission to do this")
             return
         }
         if(role !== "admin" && role !== "user") {
-            toast.error("Ogiltig roll angiven")
+            toast.error("Invalid role")
             return
         }
 
         const numberOfAdmins = users.filter(user => user.role === "admin").length
         if(numberOfAdmins <= 1 && role === "user") {
-            toast.error("Det måste finnas minst en admin")
+            toast.error("There has to be at least 1 admin")
             return
         }
         setLoading(true)
         try {
             const userRef = doc(db, "users", uid)
             await updateDoc(userRef, { role })
-            toast.success(`Användaren har nu ${role}-behörighet`)
+            toast.success(`User has now ${role}-authorization`)
         } catch (error) {
             console.error("Error updating user role: ", error)
-            toast.error("Någonting gick fel, försök igen")
+            toast.error("Something went wrong, please try again")
         } finally {
             setLoading(false)
         }

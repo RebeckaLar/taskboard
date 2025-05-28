@@ -79,7 +79,7 @@ export const UserInfoForm = ({ user }) => {
           )}
         />
         
-        <Button disabled={loading} type="submit" className="self-end">{ loading ? 'Laddar...' : 'Save'}</Button>
+        <Button disabled={loading} type="submit" className="self-end">{ loading ? 'Loading...' : 'Save'}</Button>
       </form>
     </Form>
   )

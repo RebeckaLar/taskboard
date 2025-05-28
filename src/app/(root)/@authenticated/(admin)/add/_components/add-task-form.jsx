@@ -50,8 +50,8 @@ import { format } from "date-fns";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const base = z.object({
-    title: z.string().nonempty({ message: "Uppgift är obligatorisk" }),
-    ownerId: z.string().nonempty({ message: "Du måste välja en användare" }),
+    title: z.string().nonempty({ message: "Task title is mandatory" }),
+    ownerId: z.string().nonempty({ message: "You need to choose a user for the task" }),
     time: z.date()
 })
 
@@ -63,7 +63,7 @@ const single = base.extend({
 
 const multiple = base.extend({
     reoccuring: z.literal("multiple"),
-    dateMultiple: z.array(z.date()).min(1, "Välj minst ett datum"),
+    dateMultiple: z.array(z.date()).min(1, "Choose at least one date"),
 })
 
 const range = base.extend({
@@ -141,7 +141,7 @@ async function onSubmit(values) {
 
       } catch (error) {
         console.error(error)
-        setErrorMessage("Någonting gick fel, försök igen")
+        setErrorMessage("Something went wrong, please try again")
         setSubmitted(false)
       }
   }
@@ -170,7 +170,7 @@ async function onSubmit(values) {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Uppgift</FormLabel>
+                <FormLabel>Task</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -185,7 +185,7 @@ async function onSubmit(values) {
             name="ownerId"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Tilldelad till</FormLabel>
+                <FormLabel>Assigned to</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -201,7 +201,7 @@ async function onSubmit(values) {
                           ? users.find(
                               (user) => user.uid === field.value
                             )?.displayName
-                          : "Välj användare"}
+                          : "Choose user"}
                         <ChevronsUpDown className="opacity-50" />
                       </Button>
                     </FormControl>
@@ -209,11 +209,11 @@ async function onSubmit(values) {
                   <PopoverContent className="w-52 p-0">
                     <Command>
                       <CommandInput
-                        placeholder="Sök användare..."
+                        placeholder="Search user..."
                         className="h-9"
                       />
                       <CommandList>
-                        <CommandEmpty>Inga användare hittades.</CommandEmpty>
+                        <CommandEmpty>No user found.</CommandEmpty>
                         <CommandGroup>
                           {users.map((user) => (
                             <CommandItem
@@ -254,23 +254,23 @@ async function onSubmit(values) {
           name="reoccuring"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Upprepning</FormLabel>
+              <FormLabel>Repetition</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-full sm:w-52">
-                    <SelectValue placeholder="Välj upprepning" />
+                    <SelectValue placeholder="Choose how often the task should be repeated" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="none">Ingen</SelectItem>
-                  <SelectItem value="multiple">Flera dagar</SelectItem>
-                  <SelectItem value="range">Från - Till</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="multiple">Multiple days</SelectItem>
+                  <SelectItem value="range">From - To</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>
-                 { reoccuringType === "none" && 'Välj hur ofta uppgiften ska upprepas. Väljer du "ingen" så är det en engångsuppgift.'}
-                 { reoccuringType === "multiple" && 'Välj flera dagar som du vill ha uppgiften på.'}
-                 { reoccuringType === "range" && 'Välj ett start- och slutdatum för uppgiften. Uppgiften kommer att upprepas varje dag mellan dessa datum.'}
+                 { reoccuringType === "none" && 'Please choose how often the task should be repeated. If "None" is chosen, it is a one-time task.'}
+                 { reoccuringType === "multiple" && 'Please choose which days the task should be repeated'}
+                 { reoccuringType === "range" && 'Please choose a start- and end date for the task. The task will be repeated everyday between these dates.'}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -410,7 +410,7 @@ async function onSubmit(values) {
         />
         </div>
             { errorMessage && <p className="text-red-500 text-sm">{ errorMessage }</p>}
-            <Button disabled={loading || submitted} type="submit">{ loading ? "Skapar..." : "Skapa uppgift" }</Button>
+            <Button disabled={loading || submitted} type="submit">{ loading ? "Creating..." : "Create task" }</Button>
           </form>
         </Form>
       )

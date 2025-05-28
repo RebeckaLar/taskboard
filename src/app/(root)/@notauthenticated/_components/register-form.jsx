@@ -21,16 +21,16 @@ import { getErrorMessage } from "@/lib/getFirebaseError.js"
 
 export const registerFormSchema = z.object({
   displayName: z.string()
-  .nonempty({ message: "Du måste ange ett användarnamn" })
-  .min(3, { message: "Användarnamnet måste vara minst 3 tecken långt" })
-  .max(50, { message: "Användarnamnet får inte vara längre än 50 tecken. " }),
-  email: z.string().email({ message: "Du måste ange en giltig epostadress" }),
-  password: z.string().nonempty({ message: "Du måste ha ett lösenord" })
-  .min(6, { message: "Lösenordet måste vara minst 6 tecken långt" }),
-  confirmPassword: z.string().nonempty({ message: "Du måste bekräfta lösenordet" })
+  .nonempty({ message: "Please enter a username." })
+  .min(3, { message: "Username requires at least 3 characters." })
+  .max(50, { message: "Username cannot have more than 50 characters." }),
+  email: z.string().email({ message: "Please enter a valid e-mail." }),
+  password: z.string().nonempty({ message: "Please enter a password." })
+  .min(6, { message: "Password requires at least 6 characters." }),
+  confirmPassword: z.string().nonempty({ message: "Please confirm password." })
 
 }).refine(data => data.password === data.confirmPassword, {
-  message: "Lösenorden matchar inte",
+  message: "Password do not match.",
   path: ["confirmPassword"]
 })
 
@@ -56,7 +56,7 @@ export const RegisterForm = ({ changeForm, form}) => {
 
   return (
     <>
-      <h2 className="text-center font-semibold text-2xl mb-5">Registrera nytt konto</h2>
+      <h2 className="text-center font-semibold text-2xl mb-5">Register new account</h2>
       { errorMessage && <p className="¨text-red-500 text-center">{ errorMessage }</p>}
       <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -65,12 +65,12 @@ export const RegisterForm = ({ changeForm, form}) => {
           name="displayName" //name is connecting to the form-field with the matching name
           render={({ field }) => ( 
             <FormItem>
-              <FormLabel>Användarnamn</FormLabel>
+              <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input className="not-dark:border-gray-300" {...field} />
               </FormControl>
               <FormDescription>
-                Detta kommer att vara ditt publika användarnamn på plattformen
+                This will be your public display name.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -81,7 +81,7 @@ export const RegisterForm = ({ changeForm, form}) => {
           name="email"
           render={({ field }) => ( 
             <FormItem>
-              <FormLabel>E-post</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
                 <Input type="email" className="not-dark:border-gray-300" {...field} />
               </FormControl>
@@ -94,7 +94,7 @@ export const RegisterForm = ({ changeForm, form}) => {
           name="password"
           render={({ field }) => ( 
             <FormItem>
-              <FormLabel>Lösenord</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" className="not-dark:border-gray-300" {...field} />
               </FormControl>
@@ -107,7 +107,7 @@ export const RegisterForm = ({ changeForm, form}) => {
           name="confirmPassword"
           render={({ field }) => ( 
             <FormItem>
-              <FormLabel>Bekräfta lösenord</FormLabel>
+              <FormLabel>Confirm password</FormLabel>
               <FormControl>
                 <Input type="password" className="not-dark:border-gray-300" {...field} />
               </FormControl>
@@ -115,8 +115,8 @@ export const RegisterForm = ({ changeForm, form}) => {
             </FormItem>
           )}
         />
-        <p>Har du redan ett konto? <span onClick={() => changeForm("login")} className="underline cursor-pointer">Logga in här</span></p>
-        <Button disabled={loading} className="w-full sm:w-auto" type="submit">Registrera</Button>
+        <p>Already have an account? <span onClick={() => changeForm("login")} className="underline cursor-pointer">Log in here</span></p>
+        <Button disabled={loading} className="w-full sm:w-auto" type="submit">Register</Button>
       </form>
     </Form>
     </>

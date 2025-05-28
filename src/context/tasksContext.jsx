@@ -81,7 +81,7 @@ export const TasksProvider = ({ children }) => {
                 completed: true
             })
         } catch (error) {
-            console.error("Fel vid uppdatering av uppgift: ", error)
+            console.error("Error when updating task: ", error)
         } finally {
             setLoading(false)
         }

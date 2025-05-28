@@ -8,8 +8,6 @@ function ApplicationLayout({ authenticated, notauthenticated }) {
 
     const { user, authLoaded, verifyEmail } = useAuth()
 
-    // console.log(authLoaded)
-
     if(!authLoaded) {
       return (
         <div className="flex items-center justify-center h-[90svh]">
@@ -19,11 +17,6 @@ function ApplicationLayout({ authenticated, notauthenticated }) {
     }
   return (
     <> 
-        {/* {
-            user === null 
-            ? notauthenticated
-            : authenticated
-        } */}
         {
             user === null 
             ? notauthenticated
@@ -31,9 +24,9 @@ function ApplicationLayout({ authenticated, notauthenticated }) {
               ? authenticated
               : (
                 <div className="flex flex-col text-center gap-4 items-center justify-center mt-96">
-                  <h2 className="text-2xl font-bold">Verifiera din e-postadress</h2>
-                  <p>Vi har skickat en verifieringslänk till din e-postadress. Vänligen kontrollera din inkorg.</p>
-                  <Button onClick={verifyEmail}>Skicka igen</Button>
+                  <h2 className="text-2xl font-bold">Verify your e-mail</h2>
+                  <p>We've sent a recovery link to your e-mail. Please check your inbox.</p>
+                  <Button onClick={verifyEmail}>Send again</Button>
                 </div>
               )
         }

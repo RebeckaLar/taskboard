@@ -48,7 +48,7 @@ export const Nav = () => {
                         }`}>Alla</Link> 
                     </Button>
                     <Button asChild variant="outline" size="lg" className="hidden md:flex">
-                        <Link href="/add">Lägg till uppgift</Link> 
+                        <Link href="/add">Add task</Link> 
                     </Button>
                 </>
             )

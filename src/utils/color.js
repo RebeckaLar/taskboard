@@ -2,7 +2,7 @@ export const shade = (hex, percent) => {
     const num = parseInt(hex.replace("#", ""), 16)
 
     const r = Math.min(255, Math.max(0,
-        ((num >> 16) + percent).toFixed(0))) //percent: hur mke ändra rgb värderna
+        ((num >> 16) + percent).toFixed(0))) //percent: how much the rgb colours should change
 
     const g = Math.min(255, Math.max(0,
         ((num >> 8 & 0x00FF) + percent).toFixed(0)))
@@ -15,18 +15,18 @@ export const shade = (hex, percent) => {
 }
 
 export const getReadableTextColor = (hex) => {
-    if(!hex) return undefined //fallback. Låt Tailwind styra
+    if(!hex) return undefined //fallback. Let Tailwind handle it
 
 
-    //ta bort "#" och konvertera till r, g, b [0-1]
+    // remove "#" och convert to r, g, b [0-1]
     const c = hex.replace("#", "")
     const r = parseInt(c.slice(0, 2), 16) / 255
     const g = parseInt(c.slice(2, 4), 16) / 255
     const b = parseInt(c.slice(4, 6), 16) / 255
 
-    // relativ luminans enligt WCAG
+    // relative luminance according to WCAG
     const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
 
-    // tröskel = 0.55 brukar ge bra kontrast
+    // threshold = 0.55 usually good contrast
     return lum > 0.55 ? "#000000" : "#ffffff"
 }
