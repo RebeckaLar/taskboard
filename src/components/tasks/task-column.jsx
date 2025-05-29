@@ -8,12 +8,12 @@ import { useAuth } from "@/context/authContext"
 import { Switch } from "../ui/switch"
 import { TaskProgress } from "./task-progress"
 import { TaskReorder } from "./task-reorder"
-import { useConfetti } from "@/context/confettiContext"
 import { getReadableTextColor, shade } from "@/utils/color"
 import { Button } from "../ui/button"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
+import toast from "react-hot-toast"
 
 // CREATES THE COLUMNS OF DIFFERENT USERS TASKS
 export const TaskColumn = ({ user, date, className }) => {
@@ -32,12 +32,11 @@ export const TaskColumn = ({ user, date, className }) => {
     const notCompleted = tasks.filter(task => !task.completed)
 
     const { isAdmin } = useAuth()
-    const { showConfetti } = useConfetti()
 
     const handleComplete = async (task) => {
         completeTask(task.id)
         if(tasks.length > 0 && notCompleted.length === 1) {
-            showConfetti()
+            toast("All task finished!")
         }
     }
 
@@ -118,11 +117,12 @@ export const TaskColumn = ({ user, date, className }) => {
                     <Button 
                     asChild
                     variant="icon"
-                    className="border-4 border-primary rounded-full p-2 size-12 hover:bg-[color:var(--track)] hover:text-secondary transition-colors"
+                    className="border-4 border-primary rounded-xl p-5 hover:bg-[color:var(--track)] hover:text-secondary transition-colors"
                     style={{ borderColor: accentColorIntense, color: textColor, "--track": accentColor }}
                     >
                         <Link href={`/add?date=${format(date, "yyyy-MM-dd")}&userId=${user.uid}`} aria-label="Lägg till uppgift">
                             <PlusIcon className="size-6"/>
+                            <p>Add task</p>
                         </Link>
                     </Button>
                 </div>
