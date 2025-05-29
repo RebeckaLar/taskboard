@@ -55,11 +55,11 @@ const base = z.object({
     time: z.date()
 })
 
+// DEFINING TASK REPETITION-OPTIONS:
 const single = base.extend({
     reoccuring: z.literal("none"),
     date: z.date(),
 })
-
 
 const multiple = base.extend({
     reoccuring: z.literal("multiple"),
@@ -74,7 +74,6 @@ const range = base.extend({
     }),
 })
 
-
 const formSchema = z.discriminatedUnion("reoccuring", [
     single,
     multiple,
@@ -82,11 +81,9 @@ const formSchema = z.discriminatedUnion("reoccuring", [
 ])
 
 export const AddTaskForm = ({ isModal }) => {
-
     const searchParams = useSearchParams()
     const presetDate = searchParams.get("date")
     const presetUserId = searchParams.get("userId")
- 
 
     const { users } = useUsers()
     const { addTask, loading } = useTasks()
@@ -95,24 +92,25 @@ export const AddTaskForm = ({ isModal }) => {
     const router = useRouter()
 
   // DEFINING FORM FOR ADDING A TASK:
-const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-       title: "",
-       ownerId: presetUserId ?? "",
-       reoccuring: "none",
-       date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date(),
-    },
-  })
+  const form = useForm({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+        title: "",
+        ownerId: presetUserId ?? "",
+        reoccuring: "none",
+        date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date(),
+      },
+    })
 
   const reoccuringType = form.watch("reoccuring")
 
-async function onSubmit(values) {
-    const base = {
-        title: values.title,
-        ownerId: values.ownerId,
-        time: values.time
-    }
+  // USER CLICKING ON SUBMIT TASK BUTTON:
+  async function onSubmit(values) {
+      const base = {
+          title: values.title,
+          ownerId: values.ownerId,
+          time: values.time
+      }
 
     try {
         setSubmitted(true) //To avoid spam
@@ -146,7 +144,7 @@ async function onSubmit(values) {
       }
   }
 
-    function handleTimeChange(type, value) {
+  function handleTimeChange(type, value) {
     const currentTime = form.getValues("time") || new Date();
     let newTime = new Date(currentTime);
  

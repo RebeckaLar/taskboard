@@ -40,7 +40,7 @@ export const AuthFormView = () => {
   
   
   return (
-    <div className='border dark:border-gray-800 max-w-2xl mx-auto p-4 rounded-2xl'>
+    <div className='border dark:border-brown-800 max-w-2xl mx-auto p-4 rounded-2xl'>
       <PasswordResetProvider>
         <ResetPasswordDialog />
       {

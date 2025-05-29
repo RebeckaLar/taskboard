@@ -35,10 +35,10 @@ export function Modal({ children }) {
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogHeader>
-          <DialogTitle>Add a task</DialogTitle>
-        </DialogHeader>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[480px]" aria-describedby={undefined}>
+          <DialogHeader>
+            <DialogTitle>Add a task</DialogTitle>
+          </DialogHeader>
           { children }
         </DialogContent>
       </Dialog>

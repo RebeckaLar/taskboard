@@ -31,7 +31,7 @@ export const SettingsForm = ({ user, isOwn }) => {
                 </div>
             </div>
                 {
-                    isOwn && <ChangePasswordForm className="bg-pink-700 w-full"/>
+                    isOwn && <ChangePasswordForm className="bg-[var(--card)] w-full"/>
                 }
         </div>
         {

@@ -10,7 +10,6 @@ export const Header = () => {
 
   const searchParams = useSearchParams()
   const date = searchParams.get("date")
-  // console.log(date)
   const router = useRouter()
   const pathName = usePathname()
 
@@ -19,15 +18,13 @@ export const Header = () => {
   : new Date()
 
   // Test this by going to http://localhost:3000/?date=2025-05-25 
-  // console.log({parsed})
 
-  //If valid date, send parsed, otherwise a new date
+  // If valid date, send parsed, otherwise a new date
   const selectedDate = isValid(parsed) ? parsed : new Date
 
   const navigateToDate = (newDate) => {
     const formatted = format(newDate, "yyyy-MM-dd")
     const params = new URLSearchParams(searchParams.toString())
-    // console.log(formatted)
     params.set("date", formatted)
     router.push(`${pathName}?${params.toString()}`)
   }
