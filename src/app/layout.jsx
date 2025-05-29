@@ -14,17 +14,17 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "familyplanner",
-    template: "%s | familyplanner"
+    default: "Taskboard",
+    template: "%s | Taskboard"
   },
-  description: "Planera och organisera din familjs dagar tillsammans med familyplanner",
+  description: "Planera och organisera arbetsuppgifter med Taskboard",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="sv" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-300 dark:bg-slate-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-300 dark:bg-[var(--body-background))]`}
       >
         <Providers>
           <div className="wrapper">

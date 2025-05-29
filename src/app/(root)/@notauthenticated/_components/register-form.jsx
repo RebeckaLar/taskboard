@@ -50,8 +50,6 @@ export const RegisterForm = ({ changeForm, form}) => {
       const errorMessage = getErrorMessage(err.code)
       setErrorMessage(errorMessage)
     }
-
-    console.log(values)
   }
 
   return (

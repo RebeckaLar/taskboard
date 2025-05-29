@@ -6,7 +6,7 @@ import {
     PopoverContent,
     PopoverTrigger,
   } from "@/components/ui/popover"
-import { enGB, sv } from "date-fns/locale"
+import { enGB } from "date-fns/locale"
 
 export const DatePicker = ({ date, onDateChange }) => {
   return (
