@@ -1,14 +1,21 @@
 "use client"
-import { useTasks } from "@/context/tasksContext"
-import { format } from "date-fns"
+
+import { format, isAfter } from "date-fns"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
-import { CheckIcon } from "lucide-react"
 
 //ANIMATIONS FOR TASKS
 export const Task = ({ task, handleComplete, index, accentColor }) => {
 
-  const { time } = useTasks()
+        const todayDateTime = new Date(task.date + " "+ task.time)
+
+        const today = new Date()
+
+        const taskOverdue = isAfter( today, todayDateTime)
+
+        console.log(today+ " 1")
+        console.log(todayDateTime+ " 2")
+        console.log(taskOverdue+ " 3")
 
   return (
     <Delay delay={ 100 * index }>
@@ -28,6 +35,9 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
           <div className="flex justify-between">
             <span className="text-xl font-normal">{task.title}</span>
             <span className="text-xl font-semibold">{task.time.toString()}</span>
+                {taskOverdue && (
+                <span className="text-red-500 text-xs font-semibold ml-2">Task overdue</span>
+              )}
           </div>
       </motion.div>
     </Delay>

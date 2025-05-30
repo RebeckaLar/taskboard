@@ -3,7 +3,7 @@
 import { addDoc, collection, doc, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp, updateDoc, where, writeBatch } from "firebase/firestore"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAuth } from "./authContext"
-import { format } from "date-fns"
+import { format, isToday } from "date-fns"
 import { db } from "@/lib/firebase"
 
 const TasksContext = createContext()
@@ -85,6 +85,14 @@ export const TasksProvider = ({ children }) => {
         }
     }
 
+    
+
+//     const isTaskOverdue = (task) => {
+//   // Combine date and time into a single Date object
+//         const taskDateTime = new Date(`${task.date}T${task.time}`);
+//         return !task.completed && taskDateTime < new Date();
+//     }
+
     const saveReorder = async (orderedTasks, moved) => { //after tasks are moved, save the new order to db
         setLoading(true)
 
@@ -126,7 +134,8 @@ export const TasksProvider = ({ children }) => {
         tasks,
         getTasksByUserForDate,
         completeTask,
-        saveReorder
+        saveReorder,
+        // isTaskOverdue
     }
 
     return (

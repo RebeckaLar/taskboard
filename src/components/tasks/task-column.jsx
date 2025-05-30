@@ -24,7 +24,9 @@ export const TaskColumn = ({ user, date, className }) => {
     //To avoid updating EVERY task, and only the actually moved tasks,
     const movedTasks = useRef([])
 
+    // const { getTasksByUserForDate, completeTask } = useTasks()
     const { getTasksByUserForDate, completeTask } = useTasks()
+
     //Tasks from db
     const tasks = getTasksByUserForDate(user.uid, date)
 
@@ -36,7 +38,7 @@ export const TaskColumn = ({ user, date, className }) => {
     const handleComplete = async (task) => {
         completeTask(task.id)
         if(tasks.length > 0 && notCompleted.length === 1) {
-            toast("All task finished!")
+            toast("All tasks finished!")
         }
     }
 

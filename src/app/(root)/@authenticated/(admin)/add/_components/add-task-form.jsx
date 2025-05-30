@@ -40,7 +40,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useRouter, useSearchParams } from "next/navigation"
-import { eachDayOfInterval, parse } from "date-fns"
+import { eachDayOfInterval, parse, isPast } from "date-fns"
 import { useState } from "react"
 import { useUsers } from "@/context/usersContext"
 import { Calendar } from "@/components/ui/calendar"
@@ -52,7 +52,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 const base = z.object({
     title: z.string().nonempty({ message: "Task title is mandatory" }),
     ownerId: z.string().nonempty({ message: "You need to choose a user for the task" }),
-    time: z.date()
+    time: z.date(),
 })
 
 // DEFINING TASK REPETITION-OPTIONS:
@@ -116,7 +116,9 @@ export const AddTaskForm = ({ isModal }) => {
         setSubmitted(true) //To avoid spam
     
         if(values.reoccuring === "none") {
-            await addTask({ ...base, date: values.date })
+          const taskDate = new Date(values.date) //Task date
+          await addTask({ ...base, date: values.date})
+
         }
         if(values.reoccuring === "multiple") {
             await Promise.all(
@@ -290,6 +292,7 @@ export const AddTaskForm = ({ isModal }) => {
                                 mode="single"
                                 selected={field.value}
                                 onSelect={field.onChange}
+                                disabled={(date) => isPast(date.setHours(23, 59, 59, 999))}
                             />
                             <FormMessage />
                         </FormItem>
@@ -309,6 +312,7 @@ export const AddTaskForm = ({ isModal }) => {
                                 mode="multiple"
                                 selected={field.value}
                                 onSelect={field.onChange}
+                                disabled={(date) => isPast(date.setHours(23, 59, 59, 999))}
                             />
                             <FormMessage />
                         </FormItem>
@@ -327,6 +331,7 @@ export const AddTaskForm = ({ isModal }) => {
                                 mode="range"
                                 selected={field.value}
                                 onSelect={field.onChange}
+                                disabled={(date) => isPast(date.setHours(23, 59, 59, 999))}
                             />
                             <FormMessage />
                         </FormItem>
