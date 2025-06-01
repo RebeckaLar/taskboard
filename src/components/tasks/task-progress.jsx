@@ -17,6 +17,7 @@ export const TaskProgress = ({ total = 0, completed = 0, className, user, accent
             <span>{isNaN(progress.toFixed(0)) ? 0 : progress.toFixed(0)}%</span>
         </div>
         <Progress
+        aria-label="progressbar"
         accentColor={accentColor}
         value={progress}
         className="h-4"

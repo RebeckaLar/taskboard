@@ -13,9 +13,8 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
 
         const taskOverdue = isAfter( today, todayDateTime)
 
-        console.log(today+ " 1")
-        console.log(todayDateTime+ " 2")
-        console.log(taskOverdue+ " 3")
+        console.log("Chosen deadline: "+ todayDateTime)
+        console.log("Task overdue : "+ taskOverdue)
 
   return (
     <Delay delay={ 100 * index }>
@@ -34,10 +33,12 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
         >
           <div className="flex justify-between">
             <span className="text-xl font-normal">{task.title}</span>
-            <span className="text-xl font-semibold">{task.time.toString()}</span>
+            <div className="flex gap-2 items-center">
                 {taskOverdue && (
-                <span className="text-red-500 text-xs font-semibold ml-2">Task overdue</span>
-              )}
+                  <span className="text-red-500 text-xs font-semibold ml-2">Task overdue</span>
+                )}
+                <span className="text-xl font-semibold">{task.time.toString()}</span>
+              </div>
           </div>
       </motion.div>
     </Delay>
