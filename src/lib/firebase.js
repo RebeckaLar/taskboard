@@ -15,7 +15,6 @@ const firebaseConfig = {
 //Avoiding initializing mult apps when updating components
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
 
-
 let db 
 
 try {

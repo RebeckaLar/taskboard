@@ -2,7 +2,7 @@
 
 import { auth, db } from "@/lib/firebase"
 import { createUserWithEmailAndPassword, EmailAuthProvider, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
-import { doc, getDoc, setDoc, Timestamp, updateDoc, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
@@ -15,32 +15,6 @@ export const AuthProvider = ({ children }) => {
     const [authLoaded, setAuthLoaded] = useState(false)
 
     const router = useRouter()
-
-    async function fetchOrCreateUserDoc(userId, userData = {}) {
-    const userDocRef = doc(db, "users", userId);
-    try {
-        const docSnap = await getDoc(userDocRef);
-        if (docSnap.exists()) {
-        return docSnap.data();
-        } else {
-        // Check if this is the very first user
-        const usersSnapshot = await getDocs(collection(db, "users"));
-        const isFirstUser = usersSnapshot.empty;
-        const newUserData = {
-            ...userData,
-            createdAt: Timestamp.now(),
-            role: isFirstUser ? "admin" : "user",
-            verified: false,
-            color: "#9dedcc"
-        };
-        await setDoc(userDocRef, newUserData);
-        return newUserData;
-        }
-    } catch (error) {
-        console.error("Error fetching or creating user doc:", error);
-        throw error;
-        }
-    }
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -67,48 +41,58 @@ export const AuthProvider = ({ children }) => {
                         setTimeout(resolve, delay)
                     })
                 }
+
                 return docSnap
             }
-        // Fetch user doc and set user state
-        const docSnap = await getUserDocWithRetry()
-        if(docSnap && docSnap.exists()) {
-            setUser(docSnap.data())
-        } else {
-            console.warn("Could not get user doc")
-            setUser(null)
-        }
-        setAuthLoaded(true)
-    })
-    return () => unsub()
-}, [])
+
+            const docSnap = await getUserDocWithRetry()
+            if(docSnap && docSnap.exists()) {
+                setUser(docSnap.data())
+            } else {
+                console.warn("Could not get user doc")
+                setUser(null)
+            }
+            setAuthLoaded(true)
+        })
+        return () => unsub()
+    }, [])
 
     const register = async (email, password, displayName) => {
-    setLoading(true);
+        setLoading(true)
 
-    try {
-        // CREATE USER:
-        const res = await createUserWithEmailAndPassword(auth, email, password);
-        // UPDATE PROFILE:
-        await updateProfile(res.user, { displayName });
-        if (!res.user) {
-        console.log("No user");
-        return;
+        try {
+            //CREATE USER:
+            const res = await createUserWithEmailAndPassword(auth, email, password)
+            
+            //UPDATE PROFILE:
+            await updateProfile(res.user, { displayName }) 
+
+            if(!res.user) { 
+                console.log("No user")
+                return
+            }
+
+            //CREATE USER DOC:
+            await setDoc(doc(db, "users", res.user.uid), { //Reference to the doc where I want it saved
+                uid: res.user.uid,
+                email: res.user.email,
+                displayName: res.user.displayName,
+                role: "user",
+                createdAt: Timestamp.now(),
+                photoURL: null,
+                verified: false,
+                color: "#9dedcc"
+
+            })
+
+            await verifyEmail()
+
+        } catch (error) {
+            console.log("Error registering the user: ", error)
+            throw error
+        } finally {
+            setLoading(false)
         }
-        // CREATE USER DOC (will assign admin if first user):
-        await fetchOrCreateUserDoc(res.user.uid, {
-        uid: res.user.uid,
-        email: res.user.email,
-        displayName: res.user.displayName,
-        photoURL: null,
-        })
-        console.log("User doc created or fetched!");
-        await verifyEmail();
-    } catch (error) {
-        console.log("Error registering the user: ", error);
-        throw error;
-    } finally {
-        setLoading(false);
-    }
     }
 
     const logout = async () => {
@@ -230,7 +214,7 @@ export const AuthProvider = ({ children }) => {
         updateUser,
         changePassword,
         verifyEmail,
-        sendPasswordReset,
+        sendPasswordReset
     }
 
     return (
