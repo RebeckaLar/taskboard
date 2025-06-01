@@ -3,7 +3,8 @@ import { AuthFormView } from './_components/auth-form-view'
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["700"]
+  weight: ["700"],
+  preload: true,
 })
 
 function AuthPage() {

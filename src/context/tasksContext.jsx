@@ -1,9 +1,9 @@
 "use client"
 
-import { addDoc, collection, doc, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp, updateDoc, where, writeBatch } from "firebase/firestore"
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, writeBatch } from "firebase/firestore"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAuth } from "./authContext"
-import { format, isToday } from "date-fns"
+import { format } from "date-fns"
 import { db } from "@/lib/firebase"
 
 const TasksContext = createContext()

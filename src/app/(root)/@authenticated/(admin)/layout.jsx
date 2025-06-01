@@ -15,6 +15,9 @@ function AdminLayout({ children }) {
       }
     }, [])
 
+    // if(users.length < 1) {
+    //   return user.role = "admin"
+    // }
 
     if(!isAdmin) {
       return null
